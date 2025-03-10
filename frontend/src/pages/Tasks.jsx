@@ -141,8 +141,8 @@ export default function Tasks() {
     <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Tasks</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-2xl font-semibold text-white">Tasks</h1>
+          <p className="mt-2 text-sm text-gray-300">
             Manage your tasks and track their progress.
           </p>
         </div>

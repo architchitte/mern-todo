@@ -102,100 +102,73 @@ export default function Reports() {
     return distribution;
   };
 
+  const statCards = [
+    {
+      name: 'Total Tasks',
+      value: stats.total,
+      icon: ChartBarIcon,
+    },
+    {
+      name: 'Completed',
+      value: stats.completed,
+      icon: CheckCircleIcon,
+    },
+    {
+      name: 'Pending',
+      value: stats.pending,
+      icon: ClockIcon,
+    },
+    {
+      name: 'Overdue',
+      value: stats.overdue,
+      icon: ExclamationCircleIcon,
+    },
+  ];
+
   return (
-    <div>
-      <div className="sm:flex sm:items-center">
+    <div className="p-6">
+      <div className="sm:flex sm:items-center mb-8">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Reports</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-2xl font-semibold text-white">Reports</h1>
+          <p className="mt-2 text-sm text-gray-300">
             View analytics and insights about your tasks.
           </p>
         </div>
       </div>
 
       <div className="mt-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-medium text-gray-900">Task Overview</h2>
-          <select
-            value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value)}
-            className="input w-48"
-          >
-            <option value="week">Last 7 days</option>
-            <option value="month">Last 30 days</option>
-            <option value="year">Last year</option>
-          </select>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {statCards.map((item) => (
+            <div
+              key={item.name}
+              className="card p-6 hover:scale-[1.02] transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10"
+            >
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <div className="rounded-lg bg-indigo-500/10 p-3">
+                    <item.icon className="h-6 w-6 text-indigo-400" aria-hidden="true" />
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <dt className="text-sm font-medium text-gray-300 truncate">{item.name}</dt>
+                  <dd className="text-2xl font-semibold text-gray-100">{item.value}</dd>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <ChartBarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Total Tasks</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.total}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Completed</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.completed}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <ClockIcon className="h-6 w-6 text-yellow-400" aria-hidden="true" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Pending</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.pending}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <ExclamationCircleIcon className="h-6 w-6 text-red-400" aria-hidden="true" />
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">Overdue</dt>
-                  <dd className="text-lg font-medium text-gray-900">{stats.overdue}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="card">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Priority Distribution</h3>
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="card p-6 hover:scale-[1.02] transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10">
+            <h3 className="text-lg font-medium text-gray-100 mb-4">Priority Distribution</h3>
             <div className="space-y-4">
               {Object.entries(priorityDistribution()).map(([priority, count]) => (
                 <div key={priority}>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-gray-900 capitalize">{priority}</span>
-                    <span className="text-gray-500">{count}</span>
+                    <span className="font-medium text-gray-100 capitalize">{priority}</span>
+                    <span className="text-gray-300">{count}</span>
                   </div>
-                  <div className="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="mt-1 h-2 bg-[#334155] rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${
                         priority === 'high'
@@ -214,18 +187,18 @@ export default function Reports() {
             </div>
           </div>
 
-          <div className="card">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Category Distribution</h3>
+          <div className="card p-6 hover:scale-[1.02] transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10">
+            <h3 className="text-lg font-medium text-gray-100 mb-4">Category Distribution</h3>
             <div className="space-y-4">
               {Object.entries(categoryDistribution()).map(([category, count]) => (
                 <div key={category}>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-gray-900 capitalize">{category}</span>
-                    <span className="text-gray-500">{count}</span>
+                    <span className="font-medium text-gray-100 capitalize">{category}</span>
+                    <span className="text-gray-300">{count}</span>
                   </div>
-                  <div className="mt-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="mt-1 h-2 bg-[#334155] rounded-full overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-primary-500"
+                      className="h-full rounded-full bg-indigo-500"
                       style={{
                         width: `${(count / tasks.length) * 100}%`,
                       }}
