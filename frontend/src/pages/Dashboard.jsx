@@ -66,8 +66,8 @@ export default function Dashboard() {
     <div>
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-2xl font-semibold text-white">Dashboard</h1>
+          <p className="mt-2 text-sm text-gray-300">
             A list of all your tasks and their current status.
           </p>
         </div>
