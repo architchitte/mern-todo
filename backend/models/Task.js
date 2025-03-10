@@ -14,7 +14,10 @@ const taskSchema = new mongoose.Schema({
     },
     priority: {
         type: String,
-        enum: ['high', 'medium', 'low'],
+        enum: {
+            values: ['high', 'medium', 'low'],
+            message: '{VALUE} is not a valid priority'
+        },
         default: 'medium'
     },
     category: {
@@ -27,7 +30,13 @@ const taskSchema = new mongoose.Schema({
         default: false 
     },
     dueDate: {
-        type: Date
+        type: Date,
+        validate: {
+            validator: function(value) {
+                return !value || value >= new Date();
+            },
+            message: 'Due date cannot be in the past'
+        }
     },
     isRecurring: {
         type: Boolean,
@@ -35,27 +44,54 @@ const taskSchema = new mongoose.Schema({
     },
     recurringPattern: {
         type: String,
-        enum: ['daily', 'weekly', 'monthly', null],
-        default: null
+        enum: {
+            values: ['daily', 'weekly', 'monthly', null],
+            message: '{VALUE} is not a valid recurring pattern'
+        },
+        default: null,
+        validate: {
+            validator: function(value) {
+                return !this.isRecurring || value !== null;
+            },
+            message: 'Recurring pattern is required when isRecurring is true'
+        }
     },
     progress: {
         type: Number,
-        min: 0,
-        max: 100,
-        default: 0
+        min: [0, 'Progress cannot be less than 0'],
+        max: [100, 'Progress cannot be more than 100'],
+        default: 0,
+        validate: {
+            validator: function(value) {
+                return Number.isInteger(value);
+            },
+            message: 'Progress must be an integer'
+        }
     },
     parentTask: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task',
-        default: null
+        default: null,
+        validate: {
+            validator: function(value) {
+                return value !== this._id;
+            },
+            message: 'Task cannot be its own parent'
+        }
     },
     subtasks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task'
     }],
     attachments: [{
-        type: String, // URLs to stored files
-        trim: true
+        type: String,
+        trim: true,
+        validate: {
+            validator: function(value) {
+                return /^https?:\/\/.+/.test(value);
+            },
+            message: 'Attachment must be a valid URL'
+        }
     }],
     assignedTo: {
         type: String,
@@ -63,7 +99,8 @@ const taskSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        immutable: true
     },
     lastModified: {
         type: Date,

@@ -5,6 +5,7 @@ import {
   ClockIcon,
   CheckCircleIcon,
   ExclamationCircleIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 
 const API_URL = "http://localhost:5000/api/tasks";
@@ -16,6 +17,9 @@ export default function Dashboard() {
     completed: 0,
     pending: 0,
     overdue: 0,
+    highPriority: 0,
+    mediumPriority: 0,
+    lowPriority: 0
   });
 
   useEffect(() => {
@@ -34,7 +38,7 @@ export default function Dashboard() {
 
   const calculateStats = (tasks) => {
     const now = new Date();
-    const stats = {
+    setStats({
       total: tasks.length,
       completed: tasks.filter(task => task.completed).length,
       pending: tasks.filter(task => !task.completed).length,
@@ -43,15 +47,19 @@ export default function Dashboard() {
         task.dueDate && 
         new Date(task.dueDate) < now
       ).length,
-    };
-    setStats(stats);
+      highPriority: tasks.filter(task => task.priority === 'high').length,
+      mediumPriority: tasks.filter(task => task.priority === 'medium').length,
+      lowPriority: tasks.filter(task => task.priority === 'low').length
+    });
   };
 
-  const stats = [
+  const statCards = [
     { name: 'Total Tasks', value: stats.total, icon: ChartBarIcon },
     { name: 'Completed', value: stats.completed, icon: CheckCircleIcon },
     { name: 'Pending', value: stats.pending, icon: ClockIcon },
-    { name: 'Overdue', value: stats.overdue, icon: ExclamationCircleIcon },
+    { name: 'High Priority', value: stats.highPriority, icon: ExclamationCircleIcon },
+    { name: 'Medium Priority', value: stats.mediumPriority, icon: ExclamationTriangleIcon },
+    { name: 'Low Priority', value: stats.lowPriority, icon: CheckCircleIcon },
   ];
 
   return (
@@ -65,8 +73,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((item) => (
+      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {statCards.map((item) => (
           <div
             key={item.name}
             className="relative overflow-hidden rounded-lg bg-white px-4 pt-5 pb-12 shadow sm:px-6 sm:pt-6"
@@ -154,4 +162,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-} 
+}
